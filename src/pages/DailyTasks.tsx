@@ -3,7 +3,6 @@ import { useState } from 'react'
 const DailyTasks = () => {
   const [harvested, setHarvested] = useState(false)
   const [claimedBonus, setClaimedBonus] = useState(false)
-  const [streak, setStreak] = useState(7)
 
   const dailyTasks = [
     {
@@ -69,33 +68,9 @@ const DailyTasks = () => {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      {/* Header with Streak */}
+      {/* Header */}
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-slate-900">⭐ Daily Tasks</h1>
-        <div className="text-center">
-          <div className="text-2xl font-bold text-orange-600">{streak}</div>
-          <div className="text-sm text-slate-600">Day Streak</div>
-        </div>
-      </div>
-
-      {/* Streak Progress */}
-      <div className="card">
-        <h3 className="text-lg font-semibold mb-4">🔥 Streak Progress</h3>
-        <div className="flex items-center space-x-2">
-          {[...Array(7)].map((_, i) => (
-            <div
-              key={i}
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                i < streak ? 'bg-orange-500 text-white' : 'bg-slate-200 text-slate-500'
-              }`}
-            >
-              {i + 1}
-            </div>
-          ))}
-        </div>
-        <p className="text-sm text-slate-600 mt-2">
-          Keep your streak going! {7 - streak} more days for next milestone.
-        </p>
       </div>
 
       {/* Daily Tasks */}
