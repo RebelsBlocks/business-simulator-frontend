@@ -20,44 +20,53 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated }: NavbarProps) => {
               <span>Business Simulator</span>
             </Link>
             <div className="hidden md:flex space-x-6">
-              <Link to="/email" className="text-gray-700 hover:text-blue-600 transition-colors">
-                📨 Email
+              <Link to="/email" className="text-gray-700 hover:text-blue-600 transition-colors flex items-center space-x-2">
+                <img src="/1.svg" alt="Email" className="w-5 h-5" />
+                <span>Email</span>
               </Link>
-              <Link to="/daily-tasks" className="text-gray-700 hover:text-blue-600 transition-colors">
-                ⭐ Tasks
+              <Link to="/daily-tasks" className="text-gray-700 hover:text-blue-600 transition-colors flex items-center space-x-2">
+                <img src="/2.svg" alt="Tasks" className="w-5 h-5" />
+                <span>Tasks</span>
               </Link>
-              <Link to="/score-card" className="text-gray-700 hover:text-blue-600 transition-colors">
-                📊 Score
+              <Link to="/production" className="text-gray-700 hover:text-blue-600 transition-colors flex items-center space-x-2">
+                <img src="/3.svg" alt="Production" className="w-5 h-5" />
+                <span>Production</span>
               </Link>
-              <Link to="/production" className="text-gray-700 hover:text-blue-600 transition-colors">
-                🧺 Production
+              <Link to="/sales" className="text-gray-700 hover:text-blue-600 transition-colors flex items-center space-x-2">
+                <img src="/4.svg" alt="Sales" className="w-5 h-5" />
+                <span>Sales</span>
               </Link>
-              <Link to="/suppliers" className="text-gray-700 hover:text-blue-600 transition-colors">
-                🚚 Suppliers
+              <Link to="/suppliers" className="text-gray-700 hover:text-blue-600 transition-colors flex items-center space-x-2">
+                <img src="/5.svg" alt="Suppliers" className="w-5 h-5" />
+                <span>Suppliers</span>
               </Link>
-              <Link to="/sales" className="text-gray-700 hover:text-blue-600 transition-colors">
-                💰 Sales
+              <Link to="/submit-decision" className="text-gray-700 hover:text-blue-600 transition-colors flex items-center space-x-2">
+                <img src="/6.svg" alt="Submit Decision" className="w-5 h-5" />
+                <span>Submit Decisions</span>
+              </Link>
+              <Link to="/score-card" className="text-gray-700 hover:text-blue-600 transition-colors flex items-center space-x-2">
+                <img src="/7.svg" alt="Score" className="w-5 h-5" />
+                <span>Score</span>
               </Link>
             </div>
           </div>
           
           <div className="flex items-center space-x-4">
-            <Link to="/submit-decision" className="btn btn-primary">
-              ✅ Submit Decision
-            </Link>
             {isAuthenticated ? (
               <button
                 onClick={() => setIsAuthenticated(false)}
-                className="btn btn-secondary"
+                className="text-gray-700 hover:text-blue-600 transition-colors px-4 py-2 rounded-md border border-gray-300 hover:border-blue-600 flex items-center space-x-2"
               >
-                Logout
+                <img src="/9.svg" alt="Logout" className="w-5 h-5" />
+                <span>Logout</span>
               </button>
             ) : (
               <button
                 onClick={() => setIsAuthenticated(true)}
-                className="btn btn-primary"
+                className="text-gray-700 hover:text-blue-600 transition-colors px-4 py-2 rounded-md border border-gray-300 hover:border-blue-600 flex items-center space-x-2"
               >
-                Login
+                <img src="/8.svg" alt="Login" className="w-5 h-5" />
+                <span>Login</span>
               </button>
             )}
           </div>
@@ -66,5 +75,6 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated }: NavbarProps) => {
     </nav>
   )
 }
+
 
 export default Navbar 
