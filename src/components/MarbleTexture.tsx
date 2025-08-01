@@ -1,5 +1,3 @@
-import React from 'react';
-
 const MarbleTexture = () => {
   return (
     <div className="fixed inset-0 w-full h-full overflow-hidden pointer-events-none z-0">
