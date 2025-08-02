@@ -11,10 +11,10 @@ const Suppliers = () => {
 
   // Module data
   const modules = [
-    { id: 0, name: 'Starter', cost: 1000, production: 3, description: 'Basic starter kit' },
-    { id: 1, name: 'Basic', cost: 2000, production: 5, description: 'Enhanced productivity' },
-    { id: 2, name: 'Extended', cost: 4000, production: 7, description: 'Advanced features' },
-    { id: 3, name: 'Premium', cost: 6000, production: 10, description: 'Highest yield with LED' }
+    { id: 0, name: 'V0', cost: 1000, production: 3, description: 'Basic starter kit' },
+    { id: 1, name: 'V1', cost: 2000, production: 5, description: 'Enhanced productivity' },
+    { id: 2, name: 'V2', cost: 4000, production: 7, description: 'Advanced features' },
+    { id: 3, name: 'V3', cost: 6000, production: 10, description: 'Highest yield with LED' }
   ];
 
   
