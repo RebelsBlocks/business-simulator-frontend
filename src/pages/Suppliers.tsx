@@ -4,9 +4,9 @@ import MarbleTexture from '../components/MarbleTexture';
 const Suppliers = () => {
   // Product data - updated to use PNG images instead of emojis
   const products = [
-    { id: 'tomatoes', name: 'Seeds', icon: '/tomatoes.png', color: 'from-stone-400 via-stone-600 to-stone-800' },
-    { id: 'salad', name: 'Seeds', icon: '/salad.png', color: 'from-stone-300 via-stone-500 to-stone-700' },
-    { id: 'herbs', name: 'Seeds', icon: '/herbs.png', color: 'from-stone-200 via-stone-400 to-stone-600' }
+    { id: 'tomatoes', name: 'Tomatoes', icon: '/tomatoes.png', color: 'from-stone-400 via-stone-600 to-stone-800' },
+    { id: 'salad', name: 'Salad', icon: '/salad.png', color: 'from-stone-300 via-stone-500 to-stone-700' },
+    { id: 'herbs', name: 'Herbs', icon: '/herbs.png', color: 'from-stone-200 via-stone-400 to-stone-600' }
   ];
 
   // Module data with new tier names
@@ -17,8 +17,10 @@ const Suppliers = () => {
     { id: 3, name: 'Max', cost: 6000, production: 10, description: 'Highest yield with LED' }
   ];
 
+  // Stan dla wybranych modułów (produkt -> moduł -> ilość)
   const [selectedModules, setSelectedModules] = useState<Record<string, Record<number, number>>>({});
   
+  // Stan dla wybranych tierów dla każdego produktu
   const [selectedTiers, setSelectedTiers] = useState<Record<string, number>>({
     tomatoes: 0,
     salad: 0,
@@ -71,6 +73,37 @@ const Suppliers = () => {
   const getGrandTotal = () => {
     return products.reduce((total, product) => total + getTotalCostForProduct(product.id), 0);
   };
+
+  // Funkcja do generowania szczegółowego podsumowania koszyka
+  const getCartSummary = () => {
+    const summary: Array<{
+      productName: string;
+      moduleName: string;
+      quantity: number;
+      cost: number;
+      production: number;
+    }> = [];
+
+    products.forEach(product => {
+      const productSelections = selectedModules[product.id] || {};
+      Object.entries(productSelections).forEach(([moduleIndex, quantity]) => {
+        if (quantity > 0) {
+          const module = modules[parseInt(moduleIndex)];
+          summary.push({
+            productName: product.name,
+            moduleName: module.name,
+            quantity: quantity,
+            cost: module.cost * quantity,
+            production: module.production * quantity
+          });
+        }
+      });
+    });
+
+    return summary;
+  };
+
+  const cartSummary = getCartSummary();
 
   return (
     <div className="min-h-screen relative">
@@ -192,7 +225,7 @@ const Suppliers = () => {
 
         {/* Summary */}
         <div className="bg-stone-100/90 backdrop-blur-sm border border-stone-400/50 text-stone-900 px-4 sm:px-6 py-4 rounded-xl mb-8 shadow-lg ring-1 ring-stone-300/20 hover:ring-stone-400/30 transition-all duration-300">
-          <div className="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
+          <div className="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0 mb-4">
             <div className="text-base sm:text-lg font-bold flex items-center">
               <img src="/10.svg" alt="Checkout" className="w-6 h-6 mr-2" />
               Checkout
@@ -209,6 +242,49 @@ const Suppliers = () => {
               </button>
             </div>
           </div>
+
+          {/* Cart Details */}
+          {cartSummary.length > 0 && (
+            <div className="border-t border-stone-300/50 pt-4">
+              <div className="text-sm font-semibold text-stone-700 mb-3">
+                Cart Contents ({cartSummary.length} items)
+              </div>
+              <div className="space-y-2 max-h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-stone-300 scrollbar-track-stone-100/50 backdrop-blur-sm">
+                {cartSummary.map((item, index) => (
+                  <div key={index} className="flex items-center justify-between p-2 bg-stone-50/90 backdrop-blur-sm rounded-lg border border-stone-200/60 shadow-sm hover:shadow-md transition-all duration-200">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 bg-stone-200 rounded-full flex items-center justify-center">
+                        <span className="text-xs font-bold text-stone-600">{item.quantity}</span>
+                      </div>
+                      <div>
+                        <div className="text-sm font-semibold text-stone-800">
+                          {item.productName} - {item.moduleName}
+                        </div>
+                        <div className="text-xs text-stone-600">
+                          {item.production} kg/day production
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm font-bold text-stone-800">
+                        ${item.cost.toLocaleString()}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Empty Cart Message */}
+          {cartSummary.length === 0 && (
+            <div className="border-t border-stone-300/50 pt-4">
+              <div className="text-center py-4">
+                <div className="text-sm text-stone-500 mb-2">Your cart is empty</div>
+                <div className="text-xs text-stone-400">Select products and quantities above</div>
+              </div>
+            </div>
+          )}
         </div>
 
       </div>
