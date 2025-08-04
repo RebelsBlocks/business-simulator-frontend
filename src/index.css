@@ -1,16 +1,60 @@
 @import "tailwindcss";
 
-/* Force light theme globally */
+/* Ultra aggressive light theme enforcement */
+:root {
+  color-scheme: light !important;
+  -webkit-color-scheme: light !important;
+}
+
 * {
   color-scheme: light !important;
+  -webkit-color-scheme: light !important;
+}
+
+*:before,
+*:after {
+  color-scheme: light !important;
+  -webkit-color-scheme: light !important;
 }
 
 html {
   color-scheme: light !important;
+  -webkit-color-scheme: light !important;
+  background-color: #fafaf9 !important;
 }
 
 body {
   color-scheme: light !important;
+  -webkit-color-scheme: light !important;
+  background-color: #fafaf9 !important;
+}
+
+/* Override any potential dark mode media queries */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: light !important;
+    -webkit-color-scheme: light !important;
+  }
+  
+  * {
+    color-scheme: light !important;
+    -webkit-color-scheme: light !important;
+  }
+  
+  html {
+    background-color: #fafaf9 !important;
+    color: #1c1917 !important;
+  }
+  
+  body {
+    background-color: #fafaf9 !important;
+    color: #1c1917 !important;
+  }
+  
+  #root {
+    background-color: #fafaf9 !important;
+    color: #1c1917 !important;
+  }
 }
 
 :root {
