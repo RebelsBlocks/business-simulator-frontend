@@ -14,6 +14,19 @@ interface ProductionFacility {
   selectedSeed: string | null; // 'tomatoes', 'salad', 'herbs'
 }
 
+interface SeedInventory {
+  tomatoes: number;
+  salad: number;
+  herbs: number;
+}
+
+interface TierSeedInventory {
+  starter: SeedInventory;
+  basic: SeedInventory;
+  premium: SeedInventory;
+  max: SeedInventory;
+}
+
 const Production = () => {
   const [facilities, setFacilities] = useState<ProductionFacility[]>([
     { id: 1, name: 'Facility 1', tier: 'starter', production: 3, upgradeCost: 0, isUnlocked: true, isActive: false, plantedSeeds: 0, animationPosition: 0, selectedSeed: null },
@@ -22,6 +35,14 @@ const Production = () => {
     { id: 4, name: 'Facility 4', tier: 'starter', production: 3, upgradeCost: 4000, isUnlocked: false, isActive: false, plantedSeeds: 0, animationPosition: 0, selectedSeed: null },
     { id: 5, name: 'Facility 5', tier: 'starter', production: 3, upgradeCost: 5000, isUnlocked: false, isActive: false, plantedSeeds: 0, animationPosition: 0, selectedSeed: null },
   ]);
+
+  // Dodaję stan magazynu nasion z podziałem na tiery
+  const [tierSeedInventory, setTierSeedInventory] = useState<TierSeedInventory>({
+    starter: { tomatoes: 50, salad: 40, herbs: 30 },
+    basic: { tomatoes: 40, salad: 35, herbs: 25 },
+    premium: { tomatoes: 30, salad: 25, herbs: 15 },
+    max: { tomatoes: 20, salad: 15, herbs: 10 }
+  });
 
   const seeds = [
     { id: 'tomatoes', name: 'Tomatoes', icon: '/tomatoes.png' },
@@ -87,6 +108,24 @@ const Production = () => {
     const facility = facilities.find(f => f.id === facilityId);
     if (!facility?.selectedSeed) return; // Can't plant without selecting seed
 
+    // Sprawdź czy mamy wystarczającą ilość nasion w odpowiednim tierze
+    const requiredSeeds = facility.production;
+    const currentSeeds = tierSeedInventory[facility.tier][facility.selectedSeed as keyof SeedInventory];
+    
+    if (currentSeeds < requiredSeeds) {
+      alert(`Not enough seeds in ${facility.tier} tier! You need ${requiredSeeds} seeds but have only ${currentSeeds}`);
+      return;
+    }
+
+    // Odejmij nasiona z magazynu odpowiedniego tieru
+    setTierSeedInventory(prev => ({
+      ...prev,
+      [facility.tier]: {
+        ...prev[facility.tier],
+        [facility.selectedSeed!]: prev[facility.tier][facility.selectedSeed as keyof SeedInventory] - requiredSeeds
+      }
+    }));
+
     setFacilities(prev => prev.map(facility => 
       facility.id === facilityId 
         ? { ...facility, isActive: true, plantedSeeds: facility.production, animationPosition: 0 }
@@ -121,7 +160,7 @@ const Production = () => {
   const getUnlockedFacilitiesCount = () => {
     return facilities.filter(f => f.isUnlocked).length;
   };
-  
+
   const getTierIconCount = (tier: string) => {
     switch(tier) {
       case 'starter': return 1;
@@ -137,8 +176,11 @@ const Production = () => {
       <MarbleTexture />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
         
-        {/* Production Summary */}
+        {/* Production Summary - Top */}
         <div className="bg-gradient-to-br from-stone-50/95 via-stone-100/90 to-stone-200/85 backdrop-blur-md border border-stone-300/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 mb-6 sm:mb-8 shadow-2xl ring-1 ring-stone-200/30 transition-all duration-500">
+          <div className="text-center mb-4">
+            <h2 className="text-2xl font-bold text-stone-800 mb-4">Production Summary</h2>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             <div className="text-center">
               <div className="text-3xl font-bold text-stone-800">{getUnlockedFacilitiesCount()}/5</div>
@@ -150,7 +192,7 @@ const Production = () => {
               </div>
               <div className="text-sm text-stone-600 mt-2 font-medium">Active Facilities</div>
             </div>
-              <div className="text-center">
+            <div className="text-center">
               <div className="text-3xl font-bold text-stone-800">{getTotalDailyProduction()} kg</div>
               <div className="text-sm text-stone-600 mt-2 font-medium">Daily Production</div>
             </div>
@@ -158,7 +200,7 @@ const Production = () => {
         </div>
 
         {/* Facilities Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-6 sm:mb-8">
           {facilities.filter(f => f.isUnlocked).map((facility) => (
             <div key={facility.id} className="bg-white/95 backdrop-blur-md border border-stone-200/60 rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 group">
               
@@ -287,6 +329,40 @@ const Production = () => {
               </div>
             </div>
           )}
+        </div>
+
+        {/* Seed Inventory - Bottom */}
+        <div className="bg-gradient-to-br from-stone-50/95 via-stone-100/90 to-stone-200/85 backdrop-blur-md border border-stone-300/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-2xl ring-1 ring-stone-200/30 transition-all duration-500">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-stone-800 mb-2">Seed Inventory</h2>
+            <p className="text-stone-600 text-sm">Available seeds by facility tier</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {(['starter', 'basic', 'premium', 'max'] as const).map((tier) => (
+              <div key={tier} className="bg-white/40 backdrop-blur-sm rounded-xl p-6 border border-stone-200/30 shadow-lg">
+                <div className="text-center mb-6">
+                  <div className="text-xl font-bold text-stone-800 mb-2 capitalize">{tier}</div>
+                  <div className="w-12 h-1 bg-gradient-to-r from-stone-300 to-stone-400 mx-auto rounded-full"></div>
+                </div>
+                <div className="space-y-4">
+                  {seeds.map((seed) => (
+                    <div key={seed.id} className="flex items-center justify-between p-3 bg-white/60 rounded-lg border border-stone-200/40">
+                      <div className="flex items-center gap-3">
+                        <img 
+                          src={seed.icon} 
+                          alt={seed.name}
+                          className="w-8 h-8"
+                        />
+                      </div>
+                      <div className="text-lg font-bold text-stone-800">
+                        {tierSeedInventory[tier][seed.id as keyof SeedInventory]}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
       </div>
