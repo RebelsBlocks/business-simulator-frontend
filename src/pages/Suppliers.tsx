@@ -9,16 +9,21 @@ const Suppliers = () => {
     { id: 'herbs', name: 'Seeds', icon: '/herbs.png', color: 'from-stone-200 via-stone-400 to-stone-600' }
   ];
 
-  // Module data
+  // Module data with new tier names
   const modules = [
-    { id: 0, name: 'V0', cost: 1000, production: 3, description: 'Basic starter kit' },
-    { id: 1, name: 'V1', cost: 2000, production: 5, description: 'Enhanced productivity' },
-    { id: 2, name: 'V2', cost: 4000, production: 7, description: 'Advanced features' },
-    { id: 3, name: 'V3', cost: 6000, production: 10, description: 'Highest yield with LED' }
+    { id: 0, name: 'Starter', cost: 1000, production: 3, description: 'Basic starter kit' },
+    { id: 1, name: 'Basic', cost: 2000, production: 5, description: 'Enhanced productivity' },
+    { id: 2, name: 'Premium', cost: 4000, production: 7, description: 'Advanced features' },
+    { id: 3, name: 'Max', cost: 6000, production: 10, description: 'Highest yield with LED' }
   ];
 
-  
   const [selectedModules, setSelectedModules] = useState<Record<string, Record<number, number>>>({});
+  
+  const [selectedTiers, setSelectedTiers] = useState<Record<string, number>>({
+    tomatoes: 0,
+    salad: 0,
+    herbs: 0
+  });
 
   const handleQuantityChange = (productIndex: number, moduleIndex: number, quantity: string | number) => {
     const productId = products[productIndex].id;
@@ -29,8 +34,24 @@ const Suppliers = () => {
         [moduleIndex]: parseInt(quantity.toString()) || 0
       }
     }));
+  };
 
-    // Automatically assign product to module if quantity > 0
+  const handleTierChange = (productId: string, direction: 'left' | 'right') => {
+    setSelectedTiers(prev => {
+      const currentTier = prev[productId] || 0;
+      let newTier = currentTier;
+      
+      if (direction === 'left') {
+        newTier = Math.max(0, currentTier - 1);
+      } else {
+        newTier = Math.min(modules.length - 1, currentTier + 1);
+      }
+      
+      return {
+        ...prev,
+        [productId]: newTier
+      };
+    });
   };
 
   const getTotalCostForProduct = (productId: string) => {
@@ -58,79 +79,115 @@ const Suppliers = () => {
         
         {/* Product Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-          {products.map((product, productIndex) => (
-            <div key={product.id} className="bg-stone-50/90 backdrop-blur-sm border border-stone-400/50 rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 ring-1 ring-stone-300/20 hover:ring-stone-400/30">
-              {/* Product Header */}
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="w-12 h-12 flex items-center justify-center">
-                  <img 
-                    src={product.icon} 
-                    alt={product.name}
-                    className="w-12 h-12 object-contain"
-                  />
+          {products.map((product, productIndex) => {
+            const currentTier = selectedTiers[product.id] || 0;
+            const currentModule = modules[currentTier];
+            
+            return (
+              <div key={product.id} className="bg-stone-50/90 backdrop-blur-sm border border-stone-400/50 rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 ring-1 ring-stone-300/20 hover:ring-stone-400/30">
+                {/* Product Header */}
+                <div className="flex items-center space-x-3 mb-4">
+                  <div className="w-12 h-12 flex items-center justify-center">
+                    <img 
+                      src={product.icon} 
+                      alt={product.name}
+                      className="w-12 h-12 object-contain"
+                    />
+                  </div>
+                  <div>
+                    <div className="text-lg font-bold text-stone-900">{product.name}</div>
+                  </div>
                 </div>
-                <div>
-                  <div className="text-lg font-bold text-stone-900">{product.name}</div>
-                </div>
-              </div>
 
-              {/* Modules */}
-              <div className="space-y-3">
-                {modules.map((module) => (
-                  <div key={module.id} className="bg-stone-100/80 border border-stone-200/60 rounded-lg p-3 hover:bg-stone-100 transition-colors duration-200">
-                    <div className="flex justify-between items-center mb-2">
-                      <div>
-                        <div className="font-semibold text-stone-900">{module.name}</div>
-                        <div className="text-xs text-stone-600">
-                          ${module.cost.toLocaleString()} | {module.production}kg/day
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <button 
-                          onClick={() => handleQuantityChange(productIndex, module.id, 
-                            Math.max(0, (selectedModules[product.id]?.[module.id] || 0) - 1))}
-                          className="w-8 h-8 bg-stone-200 hover:bg-stone-300 border border-stone-300 rounded-full flex items-center justify-center text-stone-600 font-bold transition-all duration-200"
-                        >
-                          −
-                        </button>
-                        <input
-                          type="number"
-                          min="0"
-                          max="10"
-                          value={selectedModules[product.id]?.[module.id] || 0}
-                          onChange={(e) => handleQuantityChange(productIndex, module.id, e.target.value)}
-                          className="w-16 h-8 text-center text-sm font-bold border-2 border-stone-300 rounded-lg focus:ring-2 focus:ring-stone-400 focus:border-stone-500 bg-stone-50"
-                        />
-                        <button 
-                          onClick={() => handleQuantityChange(productIndex, module.id, 
-                            (selectedModules[product.id]?.[module.id] || 0) + 1)}
-                          className="w-8 h-8 bg-stone-200 hover:bg-stone-300 border border-stone-300 rounded-full flex items-center justify-center text-stone-600 font-bold transition-all duration-200"
-                        >
-                          +
-                        </button>
+                {/* Tier Selection */}
+                <div className="bg-stone-100/80 border border-stone-200/60 rounded-lg p-3 mb-4">
+                  <div className="flex items-center justify-between">
+                    <button 
+                      onClick={() => handleTierChange(product.id, 'left')}
+                      disabled={currentTier === 0}
+                      className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 ${
+                        currentTier === 0 
+                          ? 'bg-stone-200 text-stone-400 cursor-not-allowed' 
+                          : 'bg-stone-300 hover:bg-stone-400 text-stone-700 hover:text-white'
+                      }`}
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                      </svg>
+                    </button>
+                    
+                    <div className="text-center flex-1">
+                      <div className="font-semibold text-stone-900 text-lg">{currentModule.name}</div>
+                      <div className="text-xs text-stone-600">
+                        ${currentModule.cost.toLocaleString()} | {currentModule.production}kg/day
                       </div>
                     </div>
+                    
+                    <button 
+                      onClick={() => handleTierChange(product.id, 'right')}
+                      disabled={currentTier === modules.length - 1}
+                      className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 ${
+                        currentTier === modules.length - 1 
+                          ? 'bg-stone-200 text-stone-400 cursor-not-allowed' 
+                          : 'bg-stone-300 hover:bg-stone-400 text-stone-700 hover:text-white'
+                      }`}
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
                   </div>
-                ))}
-              </div>
+                </div>
 
-              {/* Product Summary */}
-              <div className="mt-4 grid grid-cols-2 gap-3">
-                <div className="bg-stone-100/80 border border-stone-200/60 rounded-lg p-3 text-center">
-                  <div className="text-lg font-bold text-stone-800">
-                    ${getTotalCostForProduct(product.id).toLocaleString()}
+                {/* Quantity Selector */}
+                <div className="bg-stone-100/80 border border-stone-200/60 rounded-lg p-3 mb-4">
+                  <div className="flex items-center justify-between">
+                    <div className="text-sm font-semibold text-stone-700">Quantity</div>
+                    <div className="flex items-center space-x-2">
+                      <button 
+                        onClick={() => handleQuantityChange(productIndex, currentModule.id, 
+                          Math.max(0, (selectedModules[product.id]?.[currentModule.id] || 0) - 1))}
+                        className="w-8 h-8 bg-stone-200 hover:bg-stone-300 border border-stone-300 rounded-full flex items-center justify-center text-stone-600 font-bold transition-all duration-200"
+                      >
+                        −
+                      </button>
+                      <input
+                        type="number"
+                        min="0"
+                        max="10"
+                        value={selectedModules[product.id]?.[currentModule.id] || 0}
+                        onChange={(e) => handleQuantityChange(productIndex, currentModule.id, e.target.value)}
+                        className="w-16 h-8 text-center text-sm font-bold border-2 border-stone-300 rounded-lg focus:ring-2 focus:ring-stone-400 focus:border-stone-500 bg-stone-50"
+                      />
+                      <button 
+                        onClick={() => handleQuantityChange(productIndex, currentModule.id, 
+                          (selectedModules[product.id]?.[currentModule.id] || 0) + 1)}
+                        className="w-8 h-8 bg-stone-200 hover:bg-stone-300 border border-stone-300 rounded-full flex items-center justify-center text-stone-600 font-bold transition-all duration-200"
+                      >
+                        +
+                      </button>
+                    </div>
                   </div>
-                  <div className="text-xs text-stone-600">Total cost</div>
                 </div>
-                <div className="bg-stone-200/60 border border-stone-300/60 rounded-lg p-3 text-center">
-                  <div className="text-lg font-bold text-stone-800">
-                    {getTotalProductionForProduct(product.id)} kg
+
+                {/* Product Summary */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-stone-100/80 border border-stone-200/60 rounded-lg p-3 text-center">
+                    <div className="text-lg font-bold text-stone-800">
+                      ${getTotalCostForProduct(product.id).toLocaleString()}
+                    </div>
+                    <div className="text-xs text-stone-600">Total cost</div>
                   </div>
-                  <div className="text-xs text-stone-600">daily</div>
+                  <div className="bg-stone-200/60 border border-stone-300/60 rounded-lg p-3 text-center">
+                    <div className="text-lg font-bold text-stone-800">
+                      {getTotalProductionForProduct(product.id)} kg
+                    </div>
+                    <div className="text-xs text-stone-600">daily</div>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Summary */}
