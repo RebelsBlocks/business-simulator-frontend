@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+/* Force light theme globally */
+* {
+  color-scheme: light !important;
+}
+
+html {
+  color-scheme: light !important;
+}
+
+body {
+  color-scheme: light !important;
+}
+
 :root {
   /* Stone Color Palette - Professional & Sophisticated */
   --stone-50: 250, 250, 249;
@@ -60,16 +73,19 @@
   html {
     font-family: 'Inter', system-ui, sans-serif;
     scroll-behavior: smooth;
+    color-scheme: light !important;
   }
   
   body {
     background: linear-gradient(135deg, rgb(var(--bg-secondary)) 0%, rgb(var(--bg-tertiary)) 100%);
     color: rgb(var(--text-primary));
     min-height: 100vh;
+    color-scheme: light !important;
   }
   
   * {
     box-sizing: border-box;
+    color-scheme: light !important;
   }
 }
 
