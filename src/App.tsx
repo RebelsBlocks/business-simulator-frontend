@@ -16,9 +16,9 @@ function App() {
 
   return (
     <Router>
-      <div className="min-h-screen relative">
+      <div className="min-h-screen relative" style={{ colorScheme: 'light', backgroundColor: '#fafaf9' } as React.CSSProperties}>
         <MarbleTexture />
-        <div className="relative z-10">
+        <div className="relative z-10" style={{ colorScheme: 'light' }}>
           <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
           <main className="container mx-auto px-4 py-8">
             <Routes>
