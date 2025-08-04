@@ -1,14 +1,15 @@
 const MarbleTexture = () => {
   return (
-    <div className="fixed inset-0 w-full h-full overflow-hidden pointer-events-none z-0">
+    <div className="fixed inset-0 w-full h-full overflow-hidden pointer-events-none z-0" style={{ colorScheme: 'light' }}>
       {/* Luksusowe kremowe tło z ciepłymi podtonami */}
-      <div className="absolute inset-0 bg-gradient-to-br from-stone-50 via-stone-100 to-stone-200"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-stone-50 via-stone-100 to-stone-200" style={{ colorScheme: 'light' }}></div>
       
       {/* Główna warstwa marmuru z naturalną zmiennością */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0" style={{ colorScheme: 'light' }}>
         <div 
           className="w-full h-full opacity-80"
           style={{
+            colorScheme: 'light',
             background: `
               radial-gradient(ellipse 800px 400px at 30% 20%, ${`rgb(250 250 249 / 0.9)`} 0%, transparent 50%),
               radial-gradient(ellipse 600px 300px at 70% 60%, ${`rgb(245 245 244 / 0.8)`} 0%, transparent 45%),
@@ -20,10 +21,11 @@ const MarbleTexture = () => {
       </div>
       
       {/* Główne żyły - bardzo subtelne i płynące */}
-      <div className="absolute inset-0 opacity-40">
+      <div className="absolute inset-0 opacity-40" style={{ colorScheme: 'light' }}>
         <div 
           className="w-full h-full"
           style={{
+            colorScheme: 'light',
             background: `
               linear-gradient(125deg, 
                 transparent 0%, transparent 18%,
@@ -42,10 +44,11 @@ const MarbleTexture = () => {
       </div>
       
       {/* Druga warstwa żył - krzyżujące się delikatnie */}
-      <div className="absolute inset-0 opacity-30">
+      <div className="absolute inset-0 opacity-30" style={{ colorScheme: 'light' }}>
         <div 
           className="w-full h-full"
           style={{
+            colorScheme: 'light',
             background: `
               linear-gradient(-35deg, 
                 transparent 0%, transparent 25%,
@@ -62,18 +65,19 @@ const MarbleTexture = () => {
       </div>
       
       {/* Mineralne wykwity i naturalne plamy */}
-      <div className="absolute inset-0 opacity-25">
-        <div className="absolute top-[12%] left-[25%] w-48 h-32 bg-gradient-radial from-stone-200/60 via-stone-100/40 to-transparent rounded-full blur-xl transform rotate-12 scale-150"></div>
-        <div className="absolute top-[45%] right-[20%] w-56 h-28 bg-gradient-radial from-amber-50/50 via-stone-50/30 to-transparent rounded-full blur-2xl transform -rotate-8 scale-125"></div>
-        <div className="absolute bottom-[25%] left-[15%] w-40 h-24 bg-gradient-radial from-stone-100/40 via-neutral-50/20 to-transparent rounded-full blur-xl transform rotate-25 scale-110"></div>
-        <div className="absolute top-[35%] left-[55%] w-32 h-20 bg-gradient-radial from-stone-150/30 via-stone-100/20 to-transparent rounded-full blur-lg transform rotate-45"></div>
+      <div className="absolute inset-0 opacity-25" style={{ colorScheme: 'light' }}>
+        <div className="absolute top-[12%] left-[25%] w-48 h-32 bg-gradient-radial from-stone-200/60 via-stone-100/40 to-transparent rounded-full blur-xl transform rotate-12 scale-150" style={{ colorScheme: 'light' }}></div>
+        <div className="absolute top-[45%] right-[20%] w-56 h-28 bg-gradient-radial from-amber-50/50 via-stone-50/30 to-transparent rounded-full blur-2xl transform -rotate-8 scale-125" style={{ colorScheme: 'light' }}></div>
+        <div className="absolute bottom-[25%] left-[15%] w-40 h-24 bg-gradient-radial from-stone-100/40 via-neutral-50/20 to-transparent rounded-full blur-xl transform rotate-25 scale-110" style={{ colorScheme: 'light' }}></div>
+        <div className="absolute top-[35%] left-[55%] w-32 h-20 bg-gradient-radial from-stone-150/30 via-stone-100/20 to-transparent rounded-full blur-lg transform rotate-45" style={{ colorScheme: 'light' }}></div>
       </div>
       
       {/* Bardzo subtelne mikro-żyłki */}
-      <div className="absolute inset-0 opacity-20">
+      <div className="absolute inset-0 opacity-20" style={{ colorScheme: 'light' }}>
         <div 
           className="w-full h-full"
           style={{
+            colorScheme: 'light',
             background: `
               repeating-linear-gradient(118deg, 
                 transparent 0px, transparent 40px,
@@ -92,10 +96,11 @@ const MarbleTexture = () => {
       </div>
       
       {/* Połysk i głębia - kluczowe dla luksusu */}
-      <div className="absolute inset-0 opacity-60">
+      <div className="absolute inset-0 opacity-60" style={{ colorScheme: 'light' }}>
         <div 
           className="w-full h-full"
           style={{
+            colorScheme: 'light',
             background: `
               radial-gradient(ellipse 1200px 600px at 40% 30%, rgba(255,255,255,0.4) 0%, transparent 60%),
               radial-gradient(ellipse 800px 400px at 80% 70%, rgba(255,255,255,0.2) 0%, transparent 50%),
@@ -109,6 +114,7 @@ const MarbleTexture = () => {
       <div 
         className="absolute inset-0 opacity-8"
         style={{
+          colorScheme: 'light',
           backgroundImage: `
             radial-gradient(circle at 15% 25%, rgba(255,255,255,0.3) 0.5px, transparent 1px),
             radial-gradient(circle at 45% 15%, rgba(231,229,228,0.2) 0.3px, transparent 0.8px),
@@ -121,7 +127,7 @@ const MarbleTexture = () => {
       ></div>
       
       {/* Finalny gradient dla głębi i ciepła */}
-      <div className="absolute inset-0 bg-gradient-to-br from-amber-50/20 via-transparent to-stone-100/15"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-amber-50/20 via-transparent to-stone-100/15" style={{ colorScheme: 'light' }}></div>
     </div>
   );
 };
