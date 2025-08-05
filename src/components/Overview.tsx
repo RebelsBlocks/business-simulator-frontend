@@ -3,9 +3,10 @@ import { useState } from 'react';
 interface OverviewProps {
   accountBalance?: number;
   currentSeason?: string;
+  isAuthenticated?: boolean;
 }
 
-const Overview = ({ accountBalance = 24500, currentSeason = 'Spring' }: OverviewProps) => {
+const Overview = ({ accountBalance = 24500, currentSeason = 'Spring', isAuthenticated = false }: OverviewProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const getSeasonIcon = (season: string) => {
@@ -37,6 +38,11 @@ const Overview = ({ accountBalance = 24500, currentSeason = 'Spring' }: Overview
         return 'from-stone-400 to-stone-500';
     }
   };
+
+  // Don't render if not authenticated
+  if (!isAuthenticated) {
+    return null;
+  }
 
   return (
     <div className="fixed bottom-2 right-2 sm:bottom-4 sm:right-4 z-50">
