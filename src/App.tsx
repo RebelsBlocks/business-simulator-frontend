@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { useState } from 'react'
 import Navbar from './components/Navbar'
 import MarbleTexture from './components/MarbleTexture'
+import Overview from './components/Overview'
 import Home from './pages/Home'
 import Email from './pages/Email'
 import Dashboard from './pages/Dashboard'
@@ -28,6 +29,9 @@ function App() {
               <Route path="/sales" element={<Sales />} />
             </Routes>
           </main>
+          
+          {/* Overview Component - Available on all pages */}
+          <Overview accountBalance={24500} currentSeason="Spring" />
         </div>
       </div>
     </Router>
