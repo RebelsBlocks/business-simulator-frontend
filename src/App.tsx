@@ -4,12 +4,10 @@ import Navbar from './components/Navbar'
 import MarbleTexture from './components/MarbleTexture'
 import Home from './pages/Home'
 import Email from './pages/Email'
-import DailyTasks from './pages/DailyTasks'
-import ScoreCard from './pages/ScoreCard'
+import Dashboard from './pages/Dashboard'
 import Production from './pages/Production'
 import Suppliers from './pages/Suppliers'
 import Sales from './pages/Sales'
-import SubmitDecision from './pages/SubmitDecision'
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -24,12 +22,10 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/email" element={<Email />} />
-              <Route path="/daily-tasks" element={<DailyTasks />} />
-              <Route path="/score-card" element={<ScoreCard />} />
+              <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/production" element={<Production />} />
               <Route path="/suppliers" element={<Suppliers />} />
               <Route path="/sales" element={<Sales />} />
-              <Route path="/submit-decision" element={<SubmitDecision />} />
             </Routes>
           </main>
         </div>
