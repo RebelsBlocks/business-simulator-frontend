@@ -44,6 +44,14 @@ const Production = () => {
     max: { tomatoes: 20, salad: 15, herbs: 10 }
   });
 
+  // Stan dla rozwijanych tierów w Seed Inventory
+  const [expandedTiers, setExpandedTiers] = useState<Record<string, boolean>>({
+    starter: true, // domyślnie rozszerzony
+    basic: false,
+    premium: false,
+    max: false
+  });
+
   const seeds = [
     { id: 'tomatoes', name: 'Tomatoes', icon: '/tomatoes.png' },
     { id: 'salad', name: 'Salad', icon: '/salad.png' },
@@ -171,67 +179,79 @@ const Production = () => {
     }
   };
 
+  const toggleTierExpansion = (tier: string) => {
+    setExpandedTiers(prev => ({
+      ...prev,
+      [tier]: !prev[tier]
+    }));
+  };
+
+  const getTotalSeedsInTier = (tier: string) => {
+    const tierInventory = tierSeedInventory[tier as keyof TierSeedInventory];
+    return Object.values(tierInventory).reduce((sum, quantity) => sum + quantity, 0);
+  };
+
   return (
     <div className="min-h-screen relative">
       <MarbleTexture />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-4 sm:py-8 relative z-10">
         
         {/* Production Summary - Top */}
-        <div className="bg-gradient-to-br from-stone-50/95 via-stone-100/90 to-stone-200/85 backdrop-blur-md border border-stone-300/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 mb-6 sm:mb-8 shadow-2xl ring-1 ring-stone-200/30 transition-all duration-500">
-          <div className="text-center mb-4">
-            <h2 className="text-2xl font-bold text-stone-800 mb-4">Production Summary</h2>
+        <div className="bg-gradient-to-br from-stone-50/95 via-stone-100/90 to-stone-200/85 backdrop-blur-md border border-stone-300/40 rounded-xl sm:rounded-2xl p-4 sm:p-8 mb-4 sm:mb-8 shadow-2xl ring-1 ring-stone-200/30 transition-all duration-500">
+          <div className="text-center mb-3 sm:mb-4">
+            <h2 className="text-lg sm:text-2xl font-bold text-stone-800 mb-2 sm:mb-4">Production Summary</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-8">
             <div className="text-center">
-              <div className="text-3xl font-bold text-stone-800">{getUnlockedFacilitiesCount()}/5</div>
-              <div className="text-sm text-stone-600 mt-2 font-medium">Facilities Unlocked</div>
+              <div className="text-xl sm:text-3xl font-bold text-stone-800">{getUnlockedFacilitiesCount()}/5</div>
+              <div className="text-xs sm:text-sm text-stone-600 mt-1 sm:mt-2 font-medium">Facilities Unlocked</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-stone-800">
+              <div className="text-xl sm:text-3xl font-bold text-stone-800">
                 {facilities.filter(f => f.isActive).length}
               </div>
-              <div className="text-sm text-stone-600 mt-2 font-medium">Active Facilities</div>
+              <div className="text-xs sm:text-sm text-stone-600 mt-1 sm:mt-2 font-medium">Active Facilities</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-stone-800">{getTotalDailyProduction()} kg</div>
-              <div className="text-sm text-stone-600 mt-2 font-medium">Daily Production</div>
+              <div className="text-xl sm:text-3xl font-bold text-stone-800">{getTotalDailyProduction()} kg</div>
+              <div className="text-xs sm:text-sm text-stone-600 mt-1 sm:mt-2 font-medium">Daily Production</div>
             </div>
           </div>
         </div>
 
         {/* Facilities Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-6 sm:mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-8 mb-4 sm:mb-8">
           {facilities.filter(f => f.isUnlocked).map((facility) => (
-            <div key={facility.id} className="bg-white/95 backdrop-blur-md border border-stone-200/60 rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 group">
+            <div key={facility.id} className="bg-white/95 backdrop-blur-md border border-stone-200/60 rounded-xl p-3 sm:p-4 shadow-lg hover:shadow-xl transition-all duration-300 group">
               
               {/* Current Tier Display */}
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
                 <div className="flex items-center gap-2">
-                  <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
-                  <span className="text-sm font-bold text-gray-700 capitalize">{facility.tier}</span>
+                  <span className="text-xs sm:text-sm font-bold text-gray-700 capitalize">{facility.tier}</span>
                 </div>
                 <div className="flex items-center gap-1">
                   {Array.from({ length: getTierIconCount(facility.tier) }).map((_, index) => (
-                    <img key={index} src="/12.svg" alt="Tier Icon" className="w-4 h-4" />
+                    <img key={index} src="/12.svg" alt="Tier Icon" className="w-3 h-3 sm:w-4 sm:h-4" />
                   ))}
                 </div>
               </div>
 
               {/* Production Info */}
-              <div className="flex items-center justify-between mb-4">
-                <div className="text-2xl font-bold text-gray-900">{facility.production} kg/day</div>
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
+                <div className="text-lg sm:text-2xl font-bold text-gray-900">{facility.production} kg/day</div>
               </div>
 
                              {/* Seed Selection */}
-               <div className="grid grid-cols-3 gap-2 mb-4">
+               <div className="grid grid-cols-3 gap-2 mb-3 sm:mb-4">
                  {seeds.map((seed) => (
                    <button
                      key={seed.id}
                      onClick={() => handleSeedSelection(facility.id, seed.id)}
-                     className={`p-3 rounded-lg border-2 transition-all duration-200 ${
+                     className={`p-2 sm:p-3 rounded-lg border-2 transition-all duration-200 ${
                        facility.selectedSeed === seed.id
                          ? 'border-gray-500 bg-gray-100 shadow-sm'
                          : 'border-gray-200 bg-white hover:border-gray-300'
@@ -240,7 +260,7 @@ const Production = () => {
                      <img 
                        src={seed.icon} 
                        alt={seed.name}
-                       className="w-8 h-8 mx-auto"
+                       className="w-6 h-6 sm:w-8 sm:h-8 mx-auto"
                      />
                    </button>
                  ))}
@@ -263,13 +283,13 @@ const Production = () => {
 
               {/* Active Production Status */}
               {facility.isActive && (
-                <div className="mt-4 pt-4 border-t border-gray-200">
-                  <div className="text-center text-sm text-gray-600">
+                <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-200">
+                  <div className="text-center text-xs sm:text-sm text-gray-600">
                     <div className="flex items-center justify-center gap-2 mb-2">
                       <img 
                         src={facility.selectedSeed ? seeds.find(s => s.id === facility.selectedSeed)?.icon : undefined} 
                         alt={facility.selectedSeed || ''}
-                        className="w-5 h-5"
+                        className="w-4 h-4 sm:w-5 sm:h-5"
                       />
                       <span>Producing {facility.plantedSeeds} kg...</span>
                     </div>
@@ -296,8 +316,8 @@ const Production = () => {
                     onClick={() => handleUpgradeFacility(facility.id)}
                     className="w-full bg-gradient-to-br from-amber-50 via-stone-100 to-stone-200 hover:from-amber-100 hover:via-stone-200 hover:to-stone-300 text-stone-800 px-3 py-2 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg border border-stone-300/50 hover:border-stone-400/60"
                   >
-                    <img src="/11.svg" alt="Upgrade" className="w-4 h-4" />
-                    <span className="text-sm font-medium">Upgrade</span>
+                    <img src="/11.svg" alt="Upgrade" className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <span className="text-xs sm:text-sm font-medium">Upgrade</span>
                   </button>
                 </div>
               )}
@@ -306,13 +326,13 @@ const Production = () => {
 
           {/* Add New Facility Button */}
           {getUnlockedFacilitiesCount() < 5 && (
-            <div className="bg-white/95 backdrop-blur-md border-2 border-dashed border-gray-300 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 group">
-              <div className="flex flex-col items-center justify-center h-full min-h-[200px]">
-                <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mb-4 shadow-md group-hover:shadow-lg transition-all duration-300 transform group-hover:scale-110">
-                  <img src="/12.gif" alt="Add Facility" className="w-8 h-8" />
+            <div className="bg-white/95 backdrop-blur-md border-2 border-dashed border-gray-300 rounded-xl p-4 sm:p-6 shadow-lg hover:shadow-xl transition-all duration-300 group">
+              <div className="flex flex-col items-center justify-center h-full min-h-[150px] sm:min-h-[200px]">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gray-200 rounded-full flex items-center justify-center mb-3 sm:mb-4 shadow-md group-hover:shadow-lg transition-all duration-300 transform group-hover:scale-110">
+                  <img src="/12.gif" alt="Add Facility" className="w-6 h-6 sm:w-8 sm:h-8" />
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">Add New Facility</h3>
-                <p className="text-sm text-gray-600 text-center mb-4 font-medium">
+                <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-1 sm:mb-2">Add New Facility</h3>
+                <p className="text-xs sm:text-sm text-gray-600 text-center mb-3 sm:mb-4 font-medium">
                   Unlock additional production capacity
                 </p>
                 <button
@@ -322,7 +342,7 @@ const Production = () => {
                       handleUnlockFacility(nextFacility.id);
                     }
                   }}
-                  className="bg-stone-800 hover:bg-stone-900 text-white px-6 py-3 rounded-lg font-bold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  className="bg-stone-800 hover:bg-stone-900 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-bold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 text-sm sm:text-base"
                 >
                   Unlock for ${facilities.find(f => !f.isUnlocked)?.upgradeCost.toLocaleString()}
                 </button>
@@ -331,34 +351,67 @@ const Production = () => {
           )}
         </div>
 
-        {/* Seed Inventory - Bottom */}
-        <div className="bg-gradient-to-br from-stone-50/95 via-stone-100/90 to-stone-200/85 backdrop-blur-md border border-stone-300/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-2xl ring-1 ring-stone-200/30 transition-all duration-500">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-stone-800 mb-2">Seed Inventory</h2>
-            <p className="text-stone-600 text-sm">Available seeds by facility tier</p>
+        {/* Seed Inventory - Bottom - Collapsible Tiers */}
+        <div className="bg-gradient-to-br from-stone-50/95 via-stone-100/90 to-stone-200/85 backdrop-blur-md border border-stone-300/40 rounded-xl sm:rounded-2xl p-4 sm:p-8 shadow-2xl ring-1 ring-stone-200/30 transition-all duration-500">
+          <div className="text-center mb-4 sm:mb-6">
+            <h2 className="text-lg sm:text-2xl font-bold text-stone-800 mb-1 sm:mb-2">Seed Inventory</h2>
+            <p className="text-stone-600 text-xs sm:text-sm">Click on tiers to expand/collapse</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          
+          <div className="space-y-2 sm:space-y-3">
             {(['starter', 'basic', 'premium', 'max'] as const).map((tier) => (
-              <div key={tier} className="bg-white/40 backdrop-blur-sm rounded-xl p-6 border border-stone-200/30 shadow-lg">
-                <div className="text-center mb-6">
-                  <div className="text-xl font-bold text-stone-800 mb-2 capitalize">{tier}</div>
-                  <div className="w-12 h-1 bg-gradient-to-r from-stone-300 to-stone-400 mx-auto rounded-full"></div>
-                </div>
-                <div className="space-y-4">
-                  {seeds.map((seed) => (
-                    <div key={seed.id} className="flex items-center justify-between p-3 bg-white/60 rounded-lg border border-stone-200/40">
-                      <div className="flex items-center gap-3">
-                        <img 
-                          src={seed.icon} 
-                          alt={seed.name}
-                          className="w-8 h-8"
-                        />
-                      </div>
-                      <div className="text-lg font-bold text-stone-800">
-                        {tierSeedInventory[tier][seed.id as keyof SeedInventory]}
-                      </div>
+              <div key={tier} className="bg-white/40 backdrop-blur-sm rounded-xl border border-stone-200/30 shadow-lg overflow-hidden">
+                {/* Tier Header - Clickable */}
+                <button
+                  onClick={() => toggleTierExpansion(tier)}
+                  className="w-full p-3 sm:p-4 flex items-center justify-between hover:bg-white/20 transition-all duration-200"
+                >
+                  <div className="flex items-center gap-3 sm:gap-4">
+                    <div className="text-base sm:text-lg font-bold text-stone-800 capitalize">{tier}</div>
+                    <div className="text-xs sm:text-sm text-stone-600 bg-stone-100 px-2 py-1 rounded-full">
+                      {getTotalSeedsInTier(tier)} total seeds
                     </div>
-                  ))}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className={`w-6 h-1 bg-gradient-to-r from-stone-300 to-stone-400 rounded-full`}></div>
+                    <svg 
+                      className={`w-4 h-4 sm:w-5 sm:h-5 text-stone-600 transition-transform duration-200 ${
+                        expandedTiers[tier] ? 'rotate-180' : ''
+                      }`} 
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </button>
+
+                {/* Tier Content - Collapsible */}
+                <div className={`transition-all duration-300 ease-in-out ${
+                  expandedTiers[tier] 
+                    ? 'max-h-96 opacity-100' 
+                    : 'max-h-0 opacity-0'
+                }`}>
+                  <div className="p-3 sm:p-4 pt-0 sm:pt-0">
+                    <div className="space-y-2 sm:space-y-3">
+                      {seeds.map((seed) => (
+                        <div key={seed.id} className="flex items-center justify-between p-2 sm:p-3 bg-white/60 rounded-lg border border-stone-200/40">
+                          <div className="flex items-center gap-2 sm:gap-3">
+                            <img 
+                              src={seed.icon} 
+                              alt={seed.name}
+                              className="w-6 h-6 sm:w-8 sm:h-8"
+                            />
+                            <span className="text-xs sm:text-sm font-medium text-stone-700">{seed.name}</span>
+                          </div>
+                          <div className="text-sm sm:text-lg font-bold text-stone-800">
+                            {tierSeedInventory[tier][seed.id as keyof SeedInventory]}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
