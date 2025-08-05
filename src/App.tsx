@@ -30,8 +30,8 @@ function App() {
             </Routes>
           </main>
           
-          {/* Overview Component - Available on all pages */}
-          <Overview accountBalance={24500} currentSeason="Spring" />
+         {/* Overview Component - Available on all pages when authenticated */}
+          <Overview accountBalance={24500} currentSeason="Spring" isAuthenticated={isAuthenticated} />
         </div>
       </div>
     </Router>
