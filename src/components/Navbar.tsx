@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 
 interface NavbarProps {
@@ -8,16 +8,25 @@ interface NavbarProps {
 
 const Navbar = ({ isAuthenticated, setIsAuthenticated }: NavbarProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const navigate = useNavigate()
 
   const navigationItems = [
+    { to: "/dashboard", icon: "/7.svg", label: "Dashboard" },
     { to: "/email", icon: "/1.svg", label: "Email" },
-    { to: "/daily-tasks", icon: "/2.svg", label: "Tasks" },
     { to: "/production", icon: "/3.svg", label: "Production" },
     { to: "/sales", icon: "/4.svg", label: "Sales" },
-    { to: "/suppliers", icon: "/5.svg", label: "Suppliers" },
-    { to: "/submit-decision", icon: "/6.svg", label: "Submit Decisions" },
-    { to: "/score-card", icon: "/7.svg", label: "Score" }
+    { to: "/suppliers", icon: "/5.svg", label: "Suppliers" }
   ]
+
+  const handleLogout = () => {
+    setIsAuthenticated(false)
+    navigate('/')
+  }
+
+  const handleLogin = () => {
+    setIsAuthenticated(true)
+    navigate('/dashboard')
+  }
 
   return (
     <nav className="glass-effect shadow-lg border-b border-stone-200/30 sticky top-0 z-50 bg-gradient-to-r from-stone-50 via-stone-100 to-stone-200">
@@ -84,7 +93,7 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated }: NavbarProps) => {
             {/* Auth Button */}
             {isAuthenticated ? (
               <button
-                onClick={() => setIsAuthenticated(false)}
+                onClick={handleLogout}
                 className="btn-clean inline-flex items-center px-4 py-2 text-sm font-semibold"
               >
                 <img src="/9.svg" alt="Logout" className="w-5 h-5 mr-2" />
@@ -92,7 +101,7 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated }: NavbarProps) => {
               </button>
             ) : (
               <button
-                onClick={() => setIsAuthenticated(true)}
+                onClick={handleLogin}
                 className="btn-clean inline-flex items-center px-4 py-2 text-sm font-semibold"
               >
                 <img src="/8.svg" alt="Login" className="w-5 h-5 mr-2" />
