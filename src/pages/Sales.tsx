@@ -25,6 +25,18 @@ interface SalesItem {
   estimatedProfit: number;
 }
 
+// Product price statistics interface
+interface ProductPriceStats {
+  currentPrice: number;
+  avgPrice: number;
+  minPrice: number;
+  maxPrice: number;
+  trend: 'up' | 'down' | 'stable';
+  changePercent: number;
+  marketDemand: 'high' | 'medium' | 'low';
+  competitors: number;
+}
+
 const Sales = () => {
   // Symulowany magazyn gotowych produktów z podziałem na tiery
   const [warehouseInventory, setWarehouseInventory] = useState<TierInventory>({
@@ -49,6 +61,136 @@ const Sales = () => {
     { id: 'premium', name: 'Premium', color: 'from-stone-600 to-stone-800', bgColor: 'bg-stone-300' },
     { id: 'max', name: 'Max', color: 'from-stone-700 to-stone-900', bgColor: 'bg-stone-400' }
   ] as const;
+
+  // Product price statistics data
+  const productPriceStats: Record<string, Record<string, ProductPriceStats>> = {
+    tomatoes: {
+      starter: {
+        currentPrice: 2.50,
+        avgPrice: 2.45,
+        minPrice: 2.00,
+        maxPrice: 3.00,
+        trend: 'up',
+        changePercent: 3.2,
+        marketDemand: 'high',
+        competitors: 12
+      },
+      basic: {
+        currentPrice: 3.80,
+        avgPrice: 3.75,
+        minPrice: 3.20,
+        maxPrice: 4.50,
+        trend: 'stable',
+        changePercent: 1.1,
+        marketDemand: 'high',
+        competitors: 8
+      },
+      premium: {
+        currentPrice: 5.20,
+        avgPrice: 5.15,
+        minPrice: 4.80,
+        maxPrice: 6.00,
+        trend: 'up',
+        changePercent: 2.8,
+        marketDemand: 'medium',
+        competitors: 5
+      },
+      max: {
+        currentPrice: 7.50,
+        avgPrice: 7.40,
+        minPrice: 6.50,
+        maxPrice: 8.50,
+        trend: 'up',
+        changePercent: 4.1,
+        marketDemand: 'low',
+        competitors: 3
+      }
+    },
+    salad: {
+      starter: {
+        currentPrice: 1.80,
+        avgPrice: 1.85,
+        minPrice: 1.50,
+        maxPrice: 2.20,
+        trend: 'down',
+        changePercent: -1.8,
+        marketDemand: 'medium',
+        competitors: 15
+      },
+      basic: {
+        currentPrice: 2.90,
+        avgPrice: 2.95,
+        minPrice: 2.40,
+        maxPrice: 3.40,
+        trend: 'stable',
+        changePercent: 0.5,
+        marketDemand: 'medium',
+        competitors: 10
+      },
+      premium: {
+        currentPrice: 4.20,
+        avgPrice: 4.25,
+        minPrice: 3.80,
+        maxPrice: 4.80,
+        trend: 'down',
+        changePercent: -1.2,
+        marketDemand: 'low',
+        competitors: 6
+      },
+      max: {
+        currentPrice: 6.10,
+        avgPrice: 6.05,
+        minPrice: 5.50,
+        maxPrice: 7.00,
+        trend: 'up',
+        changePercent: 2.1,
+        marketDemand: 'low',
+        competitors: 4
+      }
+    },
+    herbs: {
+      starter: {
+        currentPrice: 3.20,
+        avgPrice: 3.15,
+        minPrice: 2.80,
+        maxPrice: 3.60,
+        trend: 'up',
+        changePercent: 2.5,
+        marketDemand: 'high',
+        competitors: 8
+      },
+      basic: {
+        currentPrice: 4.80,
+        avgPrice: 4.75,
+        minPrice: 4.20,
+        maxPrice: 5.40,
+        trend: 'up',
+        changePercent: 3.1,
+        marketDemand: 'high',
+        competitors: 6
+      },
+      premium: {
+        currentPrice: 6.50,
+        avgPrice: 6.45,
+        minPrice: 6.00,
+        maxPrice: 7.20,
+        trend: 'stable',
+        changePercent: 0.8,
+        marketDemand: 'medium',
+        competitors: 4
+      },
+      max: {
+        currentPrice: 9.20,
+        avgPrice: 9.15,
+        minPrice: 8.50,
+        maxPrice: 10.00,
+        trend: 'up',
+        changePercent: 3.8,
+        marketDemand: 'low',
+        competitors: 2
+      }
+    }
+  };
 
   // Stan dla tabeli sprzedaży - jeden wiersz na produkt z wybieranym tierem
   const [salesItems, setSalesItems] = useState<SalesItem[]>(() => {
@@ -162,6 +304,42 @@ const Sales = () => {
       <MarbleTexture />
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-4 sm:py-8 relative z-10">
         
+        {/* Product Price Statistics */}
+        <div className="bg-stone-100/90 backdrop-blur-sm border border-stone-400/50 rounded-xl p-3 sm:p-4 mb-4 sm:mb-6 shadow-lg">
+          <div className="text-center mb-3">
+            <h3 className="text-sm sm:text-base font-bold text-stone-800">Market Prices</h3>
+          </div>
+          
+          <div className="space-y-2 sm:space-y-3">
+            {products.map((product) => (
+              <div key={product.id} className="bg-white/80 backdrop-blur-sm rounded-lg p-2 border border-stone-200/40">
+                <div className="flex items-center gap-2 mb-2">
+                  <img src={product.icon} alt={product.name} className="w-4 h-4 sm:w-6 sm:h-6" />
+                  <span className="text-xs sm:text-sm font-bold text-stone-800">{product.name}</span>
+                </div>
+                
+                <div className="grid grid-cols-4 gap-1 sm:gap-2">
+                  {tiers.map((tier) => {
+                    const stats = productPriceStats[product.id][tier.id];
+                    const trendIcon = stats.trend === 'up' ? '↗' : stats.trend === 'down' ? '↘' : '→';
+                    const trendColor = stats.trend === 'up' ? 'text-green-600' : stats.trend === 'down' ? 'text-red-600' : 'text-yellow-600';
+                    
+                    return (
+                      <div key={tier.id} className="text-center">
+                        <div className="text-xs font-medium text-stone-600 capitalize">{tier.name}</div>
+                        <div className="text-sm sm:text-base font-bold text-stone-800">${stats.currentPrice}</div>
+                        <div className={`text-xs font-medium ${trendColor}`}>
+                          {trendIcon} {stats.changePercent}%
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Sales Summary - Top */}
         <div className="bg-gradient-to-br from-stone-50/95 via-stone-100/90 to-stone-200/85 backdrop-blur-md border border-stone-300/40 rounded-xl sm:rounded-2xl p-4 sm:p-8 mb-4 sm:mb-8 shadow-2xl ring-1 ring-stone-200/30 transition-all duration-500">
           <div className="text-center mb-3 sm:mb-4">
