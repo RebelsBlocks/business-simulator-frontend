@@ -108,49 +108,49 @@ const Suppliers = () => {
   return (
     <div className="min-h-screen relative">
       <MarbleTexture />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-4 sm:py-8 relative z-10">
         
         {/* Product Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-8">
           {products.map((product, productIndex) => {
             const currentTier = selectedTiers[product.id] || 0;
             const currentModule = modules[currentTier];
             
             return (
-              <div key={product.id} className="bg-stone-50/90 backdrop-blur-sm border border-stone-400/50 rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 ring-1 ring-stone-300/20 hover:ring-stone-400/30">
+              <div key={product.id} className="bg-stone-50/90 backdrop-blur-sm border border-stone-400/50 rounded-xl p-3 sm:p-4 shadow-lg hover:shadow-xl transition-all duration-300 ring-1 ring-stone-300/20 hover:ring-stone-400/30">
                 {/* Product Header */}
-                <div className="flex items-center space-x-3 mb-4">
-                  <div className="w-12 h-12 flex items-center justify-center">
+                <div className="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-4">
+                  <div className="w-8 h-8 sm:w-12 sm:h-12 flex items-center justify-center">
                     <img 
                       src={product.icon} 
                       alt={product.name}
-                      className="w-12 h-12 object-contain"
+                      className="w-8 h-8 sm:w-12 sm:h-12 object-contain"
                     />
                   </div>
                   <div>
-                    <div className="text-lg font-bold text-stone-900">{product.name}</div>
+                    <div className="text-sm sm:text-lg font-bold text-stone-900">{product.name}</div>
                   </div>
                 </div>
 
                 {/* Tier Selection */}
-                <div className="bg-stone-100/80 border border-stone-200/60 rounded-lg p-3 mb-4">
+                <div className="bg-stone-100/80 border border-stone-200/60 rounded-lg p-2 sm:p-3 mb-3 sm:mb-4">
                   <div className="flex items-center justify-between">
                     <button 
                       onClick={() => handleTierChange(product.id, 'left')}
                       disabled={currentTier === 0}
-                      className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 ${
+                      className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-all duration-200 ${
                         currentTier === 0 
                           ? 'bg-stone-200 text-stone-400 cursor-not-allowed' 
                           : 'bg-stone-300 hover:bg-stone-400 text-stone-700 hover:text-white'
                       }`}
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                       </svg>
                     </button>
                     
                     <div className="text-center flex-1">
-                      <div className="font-semibold text-stone-900 text-lg">{currentModule.name}</div>
+                      <div className="font-semibold text-stone-900 text-sm sm:text-lg">{currentModule.name}</div>
                       <div className="text-xs text-stone-600">
                         ${currentModule.cost.toLocaleString()} | {currentModule.production}kg/day
                       </div>
@@ -159,13 +159,13 @@ const Suppliers = () => {
                     <button 
                       onClick={() => handleTierChange(product.id, 'right')}
                       disabled={currentTier === modules.length - 1}
-                      className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 ${
+                      className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-all duration-200 ${
                         currentTier === modules.length - 1 
                           ? 'bg-stone-200 text-stone-400 cursor-not-allowed' 
                           : 'bg-stone-300 hover:bg-stone-400 text-stone-700 hover:text-white'
                       }`}
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
                     </button>
@@ -173,14 +173,14 @@ const Suppliers = () => {
                 </div>
 
                 {/* Quantity Selector */}
-                <div className="bg-stone-100/80 border border-stone-200/60 rounded-lg p-3 mb-4">
+                <div className="bg-stone-100/80 border border-stone-200/60 rounded-lg p-2 sm:p-3 mb-3 sm:mb-4">
                   <div className="flex items-center justify-between">
-                    <div className="text-sm font-semibold text-stone-700">Quantity</div>
-                    <div className="flex items-center space-x-2">
+                    <div className="text-xs sm:text-sm font-semibold text-stone-700">Quantity</div>
+                    <div className="flex items-center space-x-1 sm:space-x-2">
                       <button 
                         onClick={() => handleQuantityChange(productIndex, currentModule.id, 
                           Math.max(0, (selectedModules[product.id]?.[currentModule.id] || 0) - 1))}
-                        className="w-8 h-8 bg-stone-200 hover:bg-stone-300 border border-stone-300 rounded-full flex items-center justify-center text-stone-600 font-bold transition-all duration-200"
+                        className="w-6 h-6 sm:w-8 sm:h-8 bg-stone-200 hover:bg-stone-300 border border-stone-300 rounded-full flex items-center justify-center text-stone-600 font-bold transition-all duration-200 text-xs sm:text-sm"
                       >
                         −
                       </button>
@@ -190,12 +190,12 @@ const Suppliers = () => {
                         max="10"
                         value={selectedModules[product.id]?.[currentModule.id] || 0}
                         onChange={(e) => handleQuantityChange(productIndex, currentModule.id, e.target.value)}
-                        className="w-16 h-8 text-center text-sm font-bold border-2 border-stone-300 rounded-lg focus:ring-2 focus:ring-stone-400 focus:border-stone-500 bg-stone-50"
+                        className="w-12 sm:w-16 h-6 sm:h-8 text-center text-xs sm:text-sm font-bold border-2 border-stone-300 rounded-lg focus:ring-2 focus:ring-stone-400 focus:border-stone-500 bg-stone-50"
                       />
                       <button 
                         onClick={() => handleQuantityChange(productIndex, currentModule.id, 
                           (selectedModules[product.id]?.[currentModule.id] || 0) + 1)}
-                        className="w-8 h-8 bg-stone-200 hover:bg-stone-300 border border-stone-300 rounded-full flex items-center justify-center text-stone-600 font-bold transition-all duration-200"
+                        className="w-6 h-6 sm:w-8 sm:h-8 bg-stone-200 hover:bg-stone-300 border border-stone-300 rounded-full flex items-center justify-center text-stone-600 font-bold transition-all duration-200 text-xs sm:text-sm"
                       >
                         +
                       </button>
@@ -204,15 +204,15 @@ const Suppliers = () => {
                 </div>
 
                 {/* Product Summary */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-stone-100/80 border border-stone-200/60 rounded-lg p-3 text-center">
-                    <div className="text-lg font-bold text-stone-800">
+                <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                  <div className="bg-stone-100/80 border border-stone-200/60 rounded-lg p-2 sm:p-3 text-center">
+                    <div className="text-sm sm:text-lg font-bold text-stone-800">
                       ${getTotalCostForProduct(product.id).toLocaleString()}
                     </div>
                     <div className="text-xs text-stone-600">Total cost</div>
                   </div>
-                  <div className="bg-stone-200/60 border border-stone-300/60 rounded-lg p-3 text-center">
-                    <div className="text-lg font-bold text-stone-800">
+                  <div className="bg-stone-200/60 border border-stone-300/60 rounded-lg p-2 sm:p-3 text-center">
+                    <div className="text-sm sm:text-lg font-bold text-stone-800">
                       {getTotalProductionForProduct(product.id)} kg
                     </div>
                     <div className="text-xs text-stone-600">daily</div>
@@ -224,20 +224,20 @@ const Suppliers = () => {
         </div>
 
         {/* Summary */}
-        <div className="bg-stone-100/90 backdrop-blur-sm border border-stone-400/50 text-stone-900 px-4 sm:px-6 py-4 rounded-xl mb-8 shadow-lg ring-1 ring-stone-300/20 hover:ring-stone-400/30 transition-all duration-300">
-          <div className="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0 mb-4">
-            <div className="text-base sm:text-lg font-bold flex items-center">
-              <img src="/10.svg" alt="Checkout" className="w-6 h-6 mr-2" />
+        <div className="bg-stone-100/90 backdrop-blur-sm border border-stone-400/50 text-stone-900 px-3 sm:px-6 py-3 sm:py-4 rounded-xl mb-4 sm:mb-8 shadow-lg ring-1 ring-stone-300/20 hover:ring-stone-400/30 transition-all duration-300">
+          <div className="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0 mb-3 sm:mb-4">
+            <div className="text-sm sm:text-lg font-bold flex items-center">
+              <img src="/10.svg" alt="Checkout" className="w-4 h-4 sm:w-6 sm:h-6 mr-2" />
               Checkout
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               <div className="text-center">
-                <div className="text-xs sm:text-sm text-stone-600 mb-1">Total investment</div>
-                <div className="text-lg sm:text-2xl font-bold text-stone-900">
+                <div className="text-xs text-stone-600 mb-1">Total investment</div>
+                <div className="text-sm sm:text-2xl font-bold text-stone-900">
                   ${getGrandTotal().toLocaleString()}
                 </div>
               </div>
-              <button className="bg-stone-800 hover:bg-stone-900 text-white px-4 py-2 text-sm font-bold rounded-lg transition-all duration-200 hover:shadow-lg">
+              <button className="bg-stone-800 hover:bg-stone-900 text-white px-3 sm:px-4 py-2 text-xs sm:text-sm font-bold rounded-lg transition-all duration-200 hover:shadow-lg">
                 Buy Now
               </button>
             </div>
@@ -245,19 +245,19 @@ const Suppliers = () => {
 
           {/* Cart Details */}
           {cartSummary.length > 0 && (
-            <div className="border-t border-stone-300/50 pt-4">
-              <div className="text-sm font-semibold text-stone-700 mb-3">
+            <div className="border-t border-stone-300/50 pt-3 sm:pt-4">
+              <div className="text-xs sm:text-sm font-semibold text-stone-700 mb-2 sm:mb-3">
                 Cart Contents ({cartSummary.length} items)
               </div>
-              <div className="space-y-2 max-h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-stone-300 scrollbar-track-stone-100/50 backdrop-blur-sm">
+              <div className="space-y-2 max-h-32 sm:max-h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-stone-300 scrollbar-track-stone-100/50 backdrop-blur-sm">
                 {cartSummary.map((item, index) => (
                   <div key={index} className="flex items-center justify-between p-2 bg-stone-50/90 backdrop-blur-sm rounded-lg border border-stone-200/60 shadow-sm hover:shadow-md transition-all duration-200">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-stone-200 rounded-full flex items-center justify-center">
+                    <div className="flex items-center space-x-2 sm:space-x-3">
+                      <div className="w-6 h-6 sm:w-8 sm:h-8 bg-stone-200 rounded-full flex items-center justify-center">
                         <span className="text-xs font-bold text-stone-600">{item.quantity}</span>
                       </div>
                       <div>
-                        <div className="text-sm font-semibold text-stone-800">
+                        <div className="text-xs sm:text-sm font-semibold text-stone-800">
                           {item.productName} - {item.moduleName}
                         </div>
                         <div className="text-xs text-stone-600">
@@ -266,7 +266,7 @@ const Suppliers = () => {
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-sm font-bold text-stone-800">
+                      <div className="text-xs sm:text-sm font-bold text-stone-800">
                         ${item.cost.toLocaleString()}
                       </div>
                     </div>
@@ -278,9 +278,9 @@ const Suppliers = () => {
 
           {/* Empty Cart Message */}
           {cartSummary.length === 0 && (
-            <div className="border-t border-stone-300/50 pt-4">
-              <div className="text-center py-4">
-                <div className="text-sm text-stone-500 mb-2">Your cart is empty</div>
+            <div className="border-t border-stone-300/50 pt-3 sm:pt-4">
+              <div className="text-center py-3 sm:py-4">
+                <div className="text-xs sm:text-sm text-stone-500 mb-1 sm:mb-2">Your cart is empty</div>
                 <div className="text-xs text-stone-400">Select products and quantities above</div>
               </div>
             </div>
