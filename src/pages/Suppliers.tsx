@@ -17,6 +17,37 @@ const Suppliers = () => {
     { id: 3, name: 'Max', cost: 6000, production: 10, description: 'Highest yield with LED' }
   ];
 
+  // Seed price statistics data
+  const seedPriceStats = {
+    tomatoes: {
+      currentPrice: 1200,
+      avgPrice: 1150,
+      minPrice: 900,
+      maxPrice: 1400,
+      trend: 'up',
+      changePercent: 4.3,
+      marketDemand: 'high'
+    },
+    salad: {
+      currentPrice: 950,
+      avgPrice: 920,
+      minPrice: 750,
+      maxPrice: 1100,
+      trend: 'stable',
+      changePercent: 1.2,
+      marketDemand: 'medium'
+    },
+    herbs: {
+      currentPrice: 800,
+      avgPrice: 850,
+      minPrice: 650,
+      maxPrice: 1000,
+      trend: 'down',
+      changePercent: -2.1,
+      marketDemand: 'low'
+    }
+  };
+
   // Stan dla wybranych modułów (produkt -> moduł -> ilość)
   const [selectedModules, setSelectedModules] = useState<Record<string, Record<number, number>>>({});
   
@@ -109,6 +140,34 @@ const Suppliers = () => {
     <div className="min-h-screen relative">
       <MarbleTexture />
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-4 sm:py-8 relative z-10">
+        
+        {/* Seed Price Statistics */}
+        <div className="bg-stone-100/90 backdrop-blur-sm border border-stone-400/50 rounded-xl p-3 sm:p-4 mb-4 sm:mb-6 shadow-lg">
+          <div className="text-center mb-3">
+            <h3 className="text-sm sm:text-base font-bold text-stone-800">Market Prices</h3>
+          </div>
+          
+          <div className="grid grid-cols-3 gap-2 sm:gap-3">
+            {products.map((product) => {
+              const stats = seedPriceStats[product.id as keyof typeof seedPriceStats];
+              const trendIcon = stats.trend === 'up' ? '↗' : stats.trend === 'down' ? '↘' : '→';
+              const trendColor = stats.trend === 'up' ? 'text-green-600' : stats.trend === 'down' ? 'text-red-600' : 'text-yellow-600';
+              
+              return (
+                <div key={product.id} className="bg-white/80 backdrop-blur-sm rounded-lg p-2 border border-stone-200/40 text-center">
+                  <div className="flex items-center justify-center gap-1 mb-1">
+                    <img src={product.icon} alt={product.name} className="w-4 h-4 sm:w-6 sm:h-6" />
+                    <span className="text-xs sm:text-sm font-bold text-stone-800">{product.name}</span>
+                  </div>
+                  <div className="text-lg sm:text-xl font-bold text-stone-800">${stats.currentPrice}</div>
+                  <div className={`text-xs font-medium ${trendColor}`}>
+                    {trendIcon} {stats.changePercent}%
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
         
         {/* Product Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-8">
